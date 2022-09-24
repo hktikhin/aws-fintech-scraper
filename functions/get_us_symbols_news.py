@@ -42,6 +42,8 @@ def get_top_symbols_news() -> list[dict]:
     """
     Get news from IEXcloud for top 10 symbols listed in the app 
     """
+    import time
+    start_time = time.time()
     symbols = ['AAPL', 'AMC', 'MZFT', 'AMZN', 'TSLA', 'BB', 'GME', 'SPCE', 'F', 'FB']
     result = []
     for symbol in symbols:
@@ -49,6 +51,8 @@ def get_top_symbols_news() -> list[dict]:
         tmp = s.get_company_news()
         if tmp:
             result += tmp
+        end_time = time.time()
+    print("Time elapsed in function - get_top_symbols_news", end_time - start_time)
     return result
 
 def handler(event: Dict[str, Any], _: object):
