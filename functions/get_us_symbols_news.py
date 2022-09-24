@@ -74,5 +74,9 @@ def handler(event: Dict[str, Any], _: object):
         rds.insert_news(news_obj)
     print("Insertion Completed")
 
-if __name__ == '__main__':
-    handler(None, None)
+# if __name__ == '__main__':
+#     import time
+#     start_time = time.time()
+#     handler(None, None)
+#     end_time = time.time()
+#     print("Time elapsed in this example code: ", end_time - start_time)
