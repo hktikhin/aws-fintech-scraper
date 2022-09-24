@@ -15,12 +15,15 @@ class postgresql:
         self.connection.set_session(autocommit=True)
     
     def insert_news(self, news: News):
-        news_dict = {k: v for k, v in asdict(news).items() if v is not None}
+        """
+        Insert a single news into database
+        """
+        news_dict = asdict(news)
         try: 
             with self.connection.cursor() as cursor:
                 
                 stmt = sql.SQL("""
-                    INSERT INTO ({table_name} {column_tuple})
+                    INSERT INTO {table_name} ({column_tuple})
                     VALUES ({value_tuple})
                 """).format(
                     table_name = sql.Identifier(self.table_name),
@@ -30,6 +33,37 @@ class postgresql:
                     value_tuple = sql.SQL(', ').join([
                         sql.Literal(val) for val in news_dict.values()
                     ])
+                )
+                cursor.execute(stmt)
+        except Exception as e:
+            print(e)
+
+    def insert_many_news(self, news_lst: list[News]):
+        """
+        Insert multiple news into database
+        """
+        news_dicts = [asdict(news) for news in news_lst]
+
+        # Create list of tuple validated by psycopg2 sql string composition
+        composed_values = []
+
+        for news_dict in news_dicts:
+            composed_values.append(
+                sql.SQL("(") + sql.SQL(', ').join([sql.Literal(v) for v in news_dict.values()]) + sql.SQL(")")
+            )
+
+        try: 
+            with self.connection.cursor() as cursor:
+                
+                stmt = sql.SQL("""
+                    INSERT INTO {table_name} ({column_tuple})
+                    VALUES {value_tuple}
+                """).format(
+                    table_name = sql.Identifier(self.table_name),
+                    column_tuple = sql.SQL(', ').join([
+                        sql.Identifier(col) for col in news_dict[0].keys()
+                    ]),
+                    value_tuple = sql.SQL(', ').join([composed_values])
                 )
                 cursor.execute(stmt)
         except Exception as e:
