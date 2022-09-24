@@ -1,0 +1,6 @@
+__pycache__/
+.venv
+.env
+lessons.txt
+news-scraper.ipynb
+sql-statement.sql
