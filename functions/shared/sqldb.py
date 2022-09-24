@@ -19,6 +19,7 @@ class postgresql:
         Insert a single news into database
         """
         news_dict = asdict(news)
+        
         try: 
             with self.connection.cursor() as cursor:
                 

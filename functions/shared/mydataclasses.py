@@ -8,7 +8,7 @@ class News:
     url: str
     date: str
     provider: str
-    source: Optional[str]=str
+    source: Optional[str]=None
     symbol: Optional[str]=None
     related: Optional[str]=None
     score: Optional[str]=None
