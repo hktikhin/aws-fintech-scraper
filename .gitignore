@@ -1,6 +1,7 @@
 __pycache__/
 .venv
 .env
+.vscode
 cloudformation-templetes
 lessons.txt
 news-scraper.ipynb
