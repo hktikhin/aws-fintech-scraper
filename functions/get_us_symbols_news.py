@@ -19,7 +19,7 @@ class IEXstock:
         self.token = token
         self.symbol = symbol
 
-    def get_company_news(self, retry: int = 5) -> list[dict]:
+    def get_company_news(self, retry: int = 3) -> list[dict]:
         # Return the recent 10 news 
         # source: https://iexcloud.io/docs/core/NEWS
 
@@ -44,7 +44,7 @@ def get_top_symbols_news() -> list[dict]:
     """
     import time
     start_time = time.time()
-    symbols = ['AAPL', 'AMC', 'MZFT', 'AMZN', 'TSLA', 'BB', 'GME', 'SPCE', 'F', 'FB']
+    symbols = ['AAPL', 'AMC', 'MSFT', 'AMZN', 'TSLA', 'BB', 'GME', 'SPCE', 'F', 'FB']
     result = []
     for symbol in symbols:
         s = IEXstock(os.getenv("IEX_TOKEN"), symbol)
@@ -64,6 +64,7 @@ def handler(event: Dict[str, Any], _: object):
             table_name="us_news"
         )
     news_lst = get_top_symbols_news()
+    news_obj_lst = []
     for news in news_lst:
         news_obj = News(
             headline=news["headline"],
@@ -75,12 +76,13 @@ def handler(event: Dict[str, Any], _: object):
             symbol=news["symbol"],
             related=news["related"]
         )
-        rds.insert_news(news_obj)
-    print("Insertion Completed")
+        news_obj_lst.append(news_obj)
+    rds.insert_many_news(news_obj_lst)
+    
 
-# if __name__ == '__main__':
-#     import time
-#     start_time = time.time()
-#     handler(None, None)
-#     end_time = time.time()
-#     print("Time elapsed in this example code: ", end_time - start_time)
+if __name__ == '__main__':
+    import time
+    start_time = time.time()
+    handler(None, None)
+    end_time = time.time()
+    print("Time elapsed in this code: ", end_time - start_time)

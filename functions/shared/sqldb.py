@@ -26,6 +26,7 @@ class postgresql:
                 stmt = sql.SQL("""
                     INSERT INTO {table_name} ({column_tuple})
                     VALUES ({value_tuple})
+                    ;
                 """).format(
                     table_name = sql.Identifier(self.table_name),
                     column_tuple = sql.SQL(', ').join([
@@ -59,14 +60,18 @@ class postgresql:
                 stmt = sql.SQL("""
                     INSERT INTO {table_name} ({column_tuple})
                     VALUES {value_tuple}
+                    ON CONFLICT (symbol, provider, url) DO NOTHING
+                    ;
                 """).format(
                     table_name = sql.Identifier(self.table_name),
                     column_tuple = sql.SQL(', ').join([
-                        sql.Identifier(col) for col in news_dict[0].keys()
+                        sql.Identifier(col) for col in news_dicts[0].keys()
                     ]),
-                    value_tuple = sql.SQL(', ').join([composed_values])
+                    value_tuple = sql.SQL(', ').join(composed_values)
                 )
+                #print(stmt.as_string(context=self.connection))
                 cursor.execute(stmt)
+                print("Insertion Completed")
         except Exception as e:
             print(e)
 

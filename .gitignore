@@ -1,6 +1,7 @@
 __pycache__/
 .venv
 .env
+cloudformation-templetes
 lessons.txt
 news-scraper.ipynb
 sql-statement.sql
