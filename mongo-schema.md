@@ -1,3 +1,4 @@
+```
 {
   $jsonSchema: {
     bsonType: 'object',
@@ -70,3 +71,5 @@
     }
   }
 }
+
+```
