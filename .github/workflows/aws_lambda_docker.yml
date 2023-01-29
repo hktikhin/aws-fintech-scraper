@@ -58,7 +58,7 @@ jobs:
             --build-arg MONGO_URL="${{ secrets.MONGO_URL }}" \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.ECR_IMAGE_TAG }} .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.ECR_IMAGE_TAG }}
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ env.ECR_IMAGE_TAG }}"
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${{ env.ECR_IMAGE_TAG }}" >> $GITHUB_OUTPUT
 
     - name: Deploy to AWS Lambda function one
       run: |
