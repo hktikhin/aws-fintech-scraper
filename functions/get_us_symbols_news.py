@@ -65,6 +65,7 @@ def handler(event: Dict[str, Any], _: object):
         )
     news_lst = get_top_symbols_news()
     news_obj_lst = []
+    current_datetime = datetime.now()
     for news in news_lst:
         news_obj = News(
             headline=news["headline"],
@@ -74,7 +75,8 @@ def handler(event: Dict[str, Any], _: object):
             provider=news["provider"],
             source=news["source"],
             symbol=news["symbol"],
-            related=news["related"]
+            related=news["related"],
+            created_at=current_datetime
         )
         news_obj_lst.append(news_obj)
     rds.insert_many_news(news_obj_lst)
